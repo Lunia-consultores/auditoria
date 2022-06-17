@@ -1,0 +1,54 @@
+{
+    "name": "lunia/auditoria",
+    "description": "Paquete para crear un log de auditoria de todas las consultas que pasan en la aplicación",
+    "keywords": [
+        "lunia",
+        "auditoria"
+    ],
+    "homepage": "https://github.com/lunia/auditoria",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Lunia Consultores S.L",
+            "email": "desarrollo@lunia.es",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lunia\\Auditoria\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lunia\\Auditoria\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lunia\\Auditoria\\AuditoriaServiceProvider"
+            ],
+            "aliases": {
+                "Auditoria": "Lunia\\Auditoria\\AuditoriaFacade"
+            }
+        }
+    }
+}
