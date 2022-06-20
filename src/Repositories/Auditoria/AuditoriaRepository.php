@@ -1,6 +1,6 @@
 <?php
 
-namespace Lunia\Auditoria\Repositories;
+namespace Lunia\Auditoria\Repositories\Auditoria;
 
 class AuditoriaRepository
 {

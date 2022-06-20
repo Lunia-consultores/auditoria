@@ -3,7 +3,7 @@
 namespace Lunia\Auditoria\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Lunia\Auditoria\Repositories\Auditoria;
+use Lunia\Auditoria\Auditoria;
 
 class AuditoriaServiceProvider extends ServiceProvider
 {
@@ -55,7 +55,7 @@ class AuditoriaServiceProvider extends ServiceProvider
 
         // Register the main class to use with the facade
         $this->app->singleton('auditoria', function () {
-            return new Auditoria;
+           return new Auditoria;
         });
     }
 }
