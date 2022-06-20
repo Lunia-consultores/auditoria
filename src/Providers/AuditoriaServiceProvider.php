@@ -21,7 +21,7 @@ class AuditoriaServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('auditoria.php'),
+                realpath(__DIR__ . '/../../config/config.php') => config_path('auditoria.php'),
             ], 'config');
 
             $this->commands([ArchivaAuditoriaCommand::class]);

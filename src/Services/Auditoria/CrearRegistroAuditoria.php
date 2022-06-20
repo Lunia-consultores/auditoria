@@ -39,7 +39,7 @@ class CrearRegistroAuditoria
             return;
         }
 
-        if(in_array(str_replace('"','',$tablaExtraida[0]),['auditoria','migrations']) === true){
+        if(in_array(str_replace('`',"", str_replace('"','',$tablaExtraida[0])),['auditoria','migrations']) === true){
             return;
         }
 
