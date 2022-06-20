@@ -22,11 +22,11 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('auditoria.php'),
+                realpath(__DIR__ . '/../../config/config.php') => config_path('auditoria.php'),
             ], 'config');
             $this->publishes([
-                __DIR__.'/../stubs/AuditoriaServiceProvider.stub' => app_path('Providers/AuditoriaServiceProvider.php'),
-            ], 'auditori-provider');
+                realpath(__DIR__ . '/../../stubs/AuditoriaServiceProvider.php') => app_path('Providers/AuditoriaServiceProvider.php'),
+            ], 'auditoria-provider');
 
             $this->commands([ArchivaAuditoriaCommand::class]);
         }
