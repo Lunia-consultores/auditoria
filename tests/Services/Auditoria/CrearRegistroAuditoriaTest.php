@@ -48,7 +48,7 @@ class CrearRegistroAuditoriaTest extends TestCase
         $usuarioId = Uuid::uuid4();
 
         $auditoria = $this->crearRegistroAuditoria->handle(new CrearRegistroAuditoriaRequest(
-            'update equipamiento set "codigo" = ?, "descripcion" = ?, "ip_conexion" = ?, "usuario" = ?, "password" = ?, "puerto" = ?," equipamiento.updated_at" = ? where id = ?',
+            'update `equipamiento` set "codigo" = ?, "descripcion" = ?, "ip_conexion" = ?, "usuario" = ?, "password" = ?, "puerto" = ?," equipamiento.updated_at" = ? where id = ?',
             $usuarioId,
             'http://localhost/manolo',
             [$usuarioId],

@@ -26,26 +26,28 @@ class CrearRegistroAuditoria
         if (str_contains($query, 'insert into')) {
             $accion = 'INSERT';
             $tabla = trim(str_replace('insert into', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
+            $queryFormateadaEnArray = explode(' ', $tabla);
         } else if (str_contains($query, 'update ')) {
             $accion = 'UPDATE';
             $tabla = trim(str_replace('update', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
+            $queryFormateadaEnArray = explode(' ', $tabla);
         } else if (str_contains($query, 'delete')) {
             $accion = 'DELETE';
             $tabla = trim(str_replace('delete from', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
+            $queryFormateadaEnArray = explode(' ', $tabla);
         } else {
             return;
         }
+        
+        $tablaExtraida = str_replace('`',"", str_replace('"','',$queryFormateadaEnArray[0]));
 
-        if(in_array(str_replace('`',"", str_replace('"','',$tablaExtraida[0])),['auditoria','migrations']) === true){
+        if(in_array($tablaExtraida,['auditoria','migrations']) === true){
             return;
         }
 
-        if (!is_null($accion) && !is_null($tablaExtraida)) {
+        if (!is_null($accion) && !is_null($queryFormateadaEnArray)) {
 
-            if (in_array($tablaExtraida[0], $crearRegistroAuditoriaRequest->excludedTables)) {
+            if (in_array($tablaExtraida, $crearRegistroAuditoriaRequest->excludedTables)) {
                 return;
             }
 
@@ -56,7 +58,7 @@ class CrearRegistroAuditoria
                 $crearRegistroAuditoriaRequest->usuarioId,
                 $crearRegistroAuditoriaRequest->url,
                 $crearRegistroAuditoriaRequest->payload,
-                $tablaExtraida[0],
+                $tablaExtraida,
             ));
             return $auditoria;
         }
