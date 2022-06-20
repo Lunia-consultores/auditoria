@@ -30,7 +30,7 @@ class AuditoriaRepository
             'updated_at' => $auditoria->updatedAt(),
         ]);
 
-        $auditoriaCreada = $this->db->table($this->tabla)->find($auditoria->id());
+        $auditoriaCreada = $this->db->connection(config('auditoria.db_connection'))->table($this->tabla)->find($auditoria->id());
 
         return new Auditoria(
             $auditoriaCreada->id,

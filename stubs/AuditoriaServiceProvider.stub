@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Events\MigrationsEnded;
+use Illuminate\Database\Events\MigrationsStarted;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
@@ -17,7 +20,20 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
+        Event::listen(MigrationsStarted::class, function($event) {
+            config()->set('auditoria.enable_audit',false);
+        });
+
+        Event::listen(MigrationsEnded::class, function($event) {
+            config()->set('auditoria.enable_audit',true);
+        });
+
         DB::listen(function (QueryExecuted $query) {
+
+            if(config('auditoria.enable_audit') === false){
+                return;
+            }
             try{
                 $token = JWTAuth::getToken();
                 $apy = JWTAuth::getPayload($token)->toArray();
