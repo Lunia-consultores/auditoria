@@ -18,7 +18,7 @@ class AuditoriaRepository
 
     public function create(Auditoria $auditoria): Auditoria
     {
-        $this->db->table($this->tabla)->insert([
+        $this->db->connection(config('auditoria.db_connection'))->table($this->tabla)->insert([
             'id' => $auditoria->id(),
             'accion' => $auditoria->accion(),
             'query' => $auditoria->query(),
@@ -44,6 +44,6 @@ class AuditoriaRepository
     }
 
     public function borrar(string $fechaDesde, string $fechaHasta):void{
-        $this->db->table($this->tabla)->whereBetween('created_at',[$fechaDesde,$fechaHasta])->delete();
+        $this->db->connection(config('auditoria.db_connection'))->table($this->tabla)->whereBetween('created_at',[$fechaDesde,$fechaHasta])->delete();
     }
 }
