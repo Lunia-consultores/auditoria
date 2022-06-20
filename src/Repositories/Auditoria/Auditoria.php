@@ -9,14 +9,14 @@ class Auditoria
     private string $id;
     private string $accion;
     private string $query;
-    private string $usuarioId;
+    private $usuarioId;
     private string $url;
     private array $payload;
     private string $tabla;
     private DateTime $createdAt;
     private DateTime $updatedAt;
 
-    public function __construct(string $id, string $accion, string $query, string $usuarioId, string $url, array $payload,
+    public function __construct(string $id, string $accion, string $query, $usuarioId, string $url, array $payload,
                                 string $tabla)
     {
         $this->id = $id;
@@ -45,7 +45,10 @@ class Auditoria
         return $this->query;
     }
 
-    public function usuarioId(): string
+    /**
+     * @return string | null
+     */
+    public function usuarioId()
     {
         return $this->usuarioId;
     }

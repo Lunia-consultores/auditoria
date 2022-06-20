@@ -9,10 +9,12 @@ use Ramsey\Uuid\Uuid;
 class CrearRegistroAuditoria
 {
     private AuditoriaRepository $auditoriaRepository;
+    private array $excludedTables;
 
     public function __construct(AuditoriaRepository $auditoriaRepository)
     {
         $this->auditoriaRepository = $auditoriaRepository;
+        $this->excludedTables = config('excluded_tables');
     }
 
     /**
@@ -40,6 +42,11 @@ class CrearRegistroAuditoria
         }
 
         if (!is_null($accion) && !is_null($tablaExtraida)) {
+
+            if (in_array($tablaExtraida[0], $this->excludedTables)) {
+                return;
+            }
+
             $auditoria = $this->auditoriaRepository->create(new Auditoria(
                 Uuid::uuid4(),
                 $accion,

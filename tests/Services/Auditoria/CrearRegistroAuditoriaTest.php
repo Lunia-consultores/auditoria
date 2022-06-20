@@ -15,6 +15,12 @@ class CrearRegistroAuditoriaTest extends TestCase
     private CrearRegistroAuditoria $crearRegistroAuditoria;
     private DatabaseManager $db;
 
+    protected function getEnvironmentSetUp($app)
+    {
+        # Setup default database to use sqlite :memory:
+        $app['config']->set('excluded_tables', ['equipamiento_excluded']);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -77,6 +83,20 @@ class CrearRegistroAuditoriaTest extends TestCase
         $this->assertEquals('equipamiento', $auditoria->tabla());
         $this->assertEquals($usuarioId, $auditoria->usuarioId());
         $this->assertEquals([$usuarioId], $auditoria->payload());
+    }
+
+    public function testDebeCrearDevolverNullSiSeEncuentraComoTablaExcluida(): void
+    {
+        $usuarioId = Uuid::uuid4();
+
+        $auditoria = $this->crearRegistroAuditoria->handle(new CrearRegistroAuditoriaRequest(
+            'delete from equipamiento_excluded where id = ?',
+            $usuarioId,
+            'http://localhost/manolo',
+            [$usuarioId]
+        ));
+
+        $this->assertNull($auditoria);
     }
 
     public function testDebeDevolverNullSiNoEsNingunaDeLasAccionesPermitidas(): void

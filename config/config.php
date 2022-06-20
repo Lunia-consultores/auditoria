@@ -5,4 +5,5 @@
  */
 return [
     'db_connection' => env('AUDITORIA_DB_CONNECTION', 'mysql'),
+    'excluded_tables' => []
 ];
