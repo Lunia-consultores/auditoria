@@ -6,18 +6,21 @@ use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Lunia\Auditoria\Middlewares\AddToRequestAuthUser;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
 use Lunia\Auditoria\Commands\ArchivaAuditoriaCommand;
+use Illuminate\Contracts\Http\Kernel;
 
 class AuditoriaServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(Kernel $kernel)
     {
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations'));
+        $kernel->pushMiddleware(AddToRequestAuthUser::class);
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -38,7 +41,7 @@ class AuditoriaServiceProvider extends ServiceProvider
             app()->make(CrearRegistroAuditoria::class)->handle(
                 new CrearRegistroAuditoriaRequest(
                     $query->sql,
-                    auth()->id(),
+                    request()->input('auditable_user_id') ?? null,
                     request()->url(),
                     $query->bindings,
                     config('auditoria.excluded_tables')
