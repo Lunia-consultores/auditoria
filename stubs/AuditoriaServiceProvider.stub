@@ -11,7 +11,7 @@ use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
 use Lunia\Auditoria\Commands\ArchivaAuditoriaCommand;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuditoriaServiceProvider extends AuditoriaApplicationServiceProvider
+class AuditoriaServiceProvider  extends ServiceProvider
 {
 
     /**
