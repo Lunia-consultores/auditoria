@@ -13,7 +13,7 @@ class CreateTableAuditoria extends Migration
      */
     public function up()
     {
-        Schema::create('auditoria', function (Blueprint $table) {
+        Schema::connection(config('auditoria.db_connection'))->create('auditoria', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('accion')->index();
             $table->text('query')->index();
@@ -33,6 +33,6 @@ class CreateTableAuditoria extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('auditoria');
+        Schema::connection(config('auditoria.db_connection'))->dropIfExists('auditoria');
     }
 }
