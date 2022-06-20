@@ -44,7 +44,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Lunia\\Auditoria\\Providers\\AuditoriaServiceProvider"
+              "AuditoriaApplicationServiceProvider"
             ],
             "aliases": {
                 "Auditoria": "Lunia\\Auditoria\\AuditoriaFacade"
