@@ -1,6 +1,6 @@
 <?php
 
-namespace Lunia\Auditoria\Providers;
+namespace App\Providers;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Events\QueryExecuted;
@@ -31,7 +31,6 @@ class AuditoriaServiceProvider  extends ServiceProvider
                         $query->bindings,
                         config('auditoria.excluded_tables')
                     ));
-        }
         });
         // Automatically apply the package configuration
 

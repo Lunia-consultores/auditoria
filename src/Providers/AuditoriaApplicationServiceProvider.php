@@ -25,29 +25,11 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
                 realpath(__DIR__ . '/../../config/config.php') => config_path('auditoria.php'),
             ], 'config');
             $this->publishes([
-                realpath(__DIR__ . '/../../stubs/AuditoriaServiceProvider.php') => app_path('Providers/AuditoriaServiceProvider.php'),
+                realpath(__DIR__ . '/../../stubs/AuditoriaServiceProvider.stub') => app_path('Providers/AuditoriaServiceProvider.php'),
             ], 'auditoria-provider');
 
             $this->commands([ArchivaAuditoriaCommand::class]);
         }
     }
 
-    /**
-     * Register the application services.
-     */
-    public function register()
-    {
-        DB::listen(function (QueryExecuted $query) {
-            app()->make(CrearRegistroAuditoria::class)->handle(
-                new CrearRegistroAuditoriaRequest(
-                    $query->sql,
-                    null,
-                    request()->url(),
-                    $query->bindings,
-                    config('auditoria.excluded_tables')
-                ));
-        });
-        // Automatically apply the package configuration
-
-    }
 }
