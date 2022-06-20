@@ -28,18 +28,17 @@ class CrearRegistroAuditoria
         if (str_contains($query, 'insert into')) {
             $accion = 'INSERT';
             $tabla = trim(str_replace('insert into', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
         } else if (str_contains($query, 'update')) {
             $accion = 'UPDATE';
             $tabla = trim(str_replace('update', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
         } else if (str_contains($query, 'delete')) {
             $accion = 'DELETE';
             $tabla = trim(str_replace('delete from', '', $query));
-            $tablaExtraida = explode(' ', $tabla);
         }
 
         if (!is_null($accion) && !is_null($tablaExtraida)) {
+            $tablaExtraida = explode(' ', $tabla);
+
             $auditoria = $this->auditoriaRepository->create(new Auditoria(
                 Uuid::uuid4(),
                 $accion,
