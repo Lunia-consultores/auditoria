@@ -3,7 +3,11 @@
 namespace Lunia\Auditoria\Providers;
 
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
+use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
 
 class AuditoriaServiceProvider extends ServiceProvider
 {
@@ -45,6 +49,15 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        DB::listen(function (QueryExecuted $query) {
+            app()->make(CrearRegistroAuditoria::class)->handle(
+                new CrearRegistroAuditoriaRequest(
+                    $query->sql,
+                    auth()->id(),
+                    request()->url(),
+                    $query->bindings
+                ));
+        });
         // Automatically apply the package configuration
         $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
 
