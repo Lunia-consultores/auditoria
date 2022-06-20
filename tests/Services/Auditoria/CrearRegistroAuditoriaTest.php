@@ -3,7 +3,6 @@
 namespace Lunia\Auditoria\Tests\Services\Auditoria;
 
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Facades\DB;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
 use Lunia\Auditoria\Tests\TestCase;
