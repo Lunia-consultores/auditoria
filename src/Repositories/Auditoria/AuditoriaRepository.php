@@ -22,14 +22,24 @@ class AuditoriaRepository
             'id' => $auditoria->id(),
             'accion' => $auditoria->accion(),
             'query' => $auditoria->query(),
-            'usuarioId' => $auditoria->usuarioId(),
+            'usuario_id' => $auditoria->usuarioId(),
             'url' => $auditoria->url(),
             'payload' => json_encode($auditoria->payload()),
             'tabla' => $auditoria->tabla(),
-            'createdAt' => $auditoria->createdAt(),
-            'updatedAt' => $auditoria->updatedAt(),
+            'created_at' => $auditoria->createdAt(),
+            'updated_at' => $auditoria->updatedAt(),
         ]);
 
         $auditoriaCreada = $this->db->table($this->tabla)->find($auditoria->id());
+
+        return new Auditoria(
+            $auditoriaCreada->id,
+            $auditoriaCreada->accion,
+            $auditoriaCreada->query,
+            $auditoriaCreada->usuario_id,
+            $auditoriaCreada->url,
+            json_decode($auditoriaCreada->payload),
+            $auditoriaCreada->tabla,
+        );
     }
 }

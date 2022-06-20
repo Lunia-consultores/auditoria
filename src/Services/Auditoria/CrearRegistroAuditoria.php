@@ -35,11 +35,10 @@ class CrearRegistroAuditoria
             $tablaExtraida = explode(' ', $tabla);
         } else if (str_contains($query, 'delete')) {
             $accion = 'DELETE';
-            $tabla = trim(str_replace('delete', '', $query));
+            $tabla = trim(str_replace('delete from', '', $query));
             $tablaExtraida = explode(' ', $tabla);
         }
 
-        dump($accion, $tablaExtraida[0]);
         if (!is_null($accion) && !is_null($tablaExtraida)) {
             $auditoria = $this->auditoriaRepository->create(new Auditoria(
                 Uuid::uuid4(),
