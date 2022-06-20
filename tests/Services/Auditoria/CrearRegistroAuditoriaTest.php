@@ -15,11 +15,6 @@ class CrearRegistroAuditoriaTest extends TestCase
     private CrearRegistroAuditoria $crearRegistroAuditoria;
     private DatabaseManager $db;
 
-    protected function getEnvironmentSetUp($app)
-    {
-        # Setup default database to use sqlite :memory:
-        $app['config']->set('excluded_tables', ['equipamiento_excluded']);
-    }
 
     protected function setUp(): void
     {
@@ -36,7 +31,8 @@ class CrearRegistroAuditoriaTest extends TestCase
             'insert into my_table (id) values(?);',
             $usuarioId,
             'http://localhost/manolo',
-            [$usuarioId]
+            [$usuarioId],
+            ['equipamiento_excluded']
         ));
 
         $this->assertNotNull($auditoria);
@@ -55,7 +51,8 @@ class CrearRegistroAuditoriaTest extends TestCase
             'update equipamiento set "codigo" = ?, "descripcion" = ?, "ip_conexion" = ?, "usuario" = ?, "password" = ?, "puerto" = ?," equipamiento.updated_at" = ? where id = ?',
             $usuarioId,
             'http://localhost/manolo',
-            [$usuarioId]
+            [$usuarioId],
+            ['equipamiento_excluded']
         ));
 
         $this->assertNotNull($auditoria);
@@ -74,7 +71,8 @@ class CrearRegistroAuditoriaTest extends TestCase
             'delete from equipamiento where id = ?',
             $usuarioId,
             'http://localhost/manolo',
-            [$usuarioId]
+            [$usuarioId],
+            ['equipamiento_excluded']
         ));
 
         $this->assertNotNull($auditoria);
@@ -93,7 +91,8 @@ class CrearRegistroAuditoriaTest extends TestCase
             'delete from equipamiento_excluded where id = ?',
             $usuarioId,
             'http://localhost/manolo',
-            [$usuarioId]
+            [$usuarioId],
+            ['equipamiento_excluded']
         ));
 
         $this->assertNull($auditoria);
@@ -107,7 +106,8 @@ class CrearRegistroAuditoriaTest extends TestCase
             'select * from tabla',
             $usuarioId,
             'http://localhost/manolo',
-            [$usuarioId]
+            [$usuarioId],
+            ['equipamiento_excluded']
         ));
 
         $this->assertNull($auditoria);

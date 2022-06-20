@@ -33,17 +33,18 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
         DB::listen(function (QueryExecuted $query) {
             app()->make(CrearRegistroAuditoria::class)->handle(
                 new CrearRegistroAuditoriaRequest(
                     $query->sql,
                     auth()->id(),
                     request()->url(),
-                    $query->bindings
+                    $query->bindings,
+                    config('auditoria.excluded_tables')
                 ));
         });
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
 
     }
 }
