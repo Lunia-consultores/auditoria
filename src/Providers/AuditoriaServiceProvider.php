@@ -2,8 +2,13 @@
 
 namespace Lunia\Auditoria\Providers;
 
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
-use Lunia\Auditoria\Repositories\Auditoria;
+use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
+use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
+use Lunia\Auditoria\Commands\ArchivaAuditoriaCommand;
 
 class AuditoriaServiceProvider extends ServiceProvider
 {
@@ -12,36 +17,14 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*
-         * Optional methods to load your package assets
-         */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'auditoria');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'auditoria');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations'));
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('auditoria.php'),
             ], 'config');
 
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/auditoria'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/auditoria'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/auditoria'),
-            ], 'lang');*/
-
-            // Registering package commands.
-            // $this->commands([]);
+            $this->commands([ArchivaAuditoriaCommand::class]);
         }
     }
 
@@ -50,12 +33,18 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auditoria');
-
-        // Register the main class to use with the facade
-        $this->app->singleton('auditoria', function () {
-            return new Auditoria;
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
+        DB::listen(function (QueryExecuted $query) {
+            app()->make(CrearRegistroAuditoria::class)->handle(
+                new CrearRegistroAuditoriaRequest(
+                    $query->sql,
+                    auth()->id(),
+                    request()->url(),
+                    $query->bindings,
+                    config('auditoria.excluded_tables')
+                ));
         });
+        // Automatically apply the package configuration
+
     }
 }

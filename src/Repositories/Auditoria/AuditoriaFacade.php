@@ -1,12 +1,9 @@
 <?php
 
-namespace Lunia\Auditoria;
+namespace Lunia\Auditoria\Repositories\Auditoria;
 
 use Illuminate\Support\Facades\Facade;
 
-/**
- * @see \Lunia\Auditoria\Skeleton\SkeletonClass
- */
 class AuditoriaFacade extends Facade
 {
     /**
