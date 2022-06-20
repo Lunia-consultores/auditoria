@@ -2,16 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
-use Lunia\Auditoria\Commands\ArchivaAuditoriaCommand;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuditoriaServiceProvider  extends ServiceProvider
+class AuditoriaServiceProvider extends ServiceProvider
 {
 
     /**
@@ -20,19 +18,23 @@ class AuditoriaServiceProvider  extends ServiceProvider
     public function register()
     {
         DB::listen(function (QueryExecuted $query) {
-            $token = JWTAuth::getToken();
-            $apy = JWTAuth::getPayload($token)->toArray();
+            try{
+                $token = JWTAuth::getToken();
+                $apy = JWTAuth::getPayload($token)->toArray();
+                $userId = $apy['sub'];
+            }catch (\Throwable $throwable) {
+                $userId = null;
+            }
 
-                app()->make(CrearRegistroAuditoria::class)->handle(
-                    new CrearRegistroAuditoriaRequest(
-                        $query->sql,
-                        $apy['sub'] ?? null,
-                        request()->url(),
-                        $query->bindings,
-                        config('auditoria.excluded_tables')
-                    ));
+            app()->make(CrearRegistroAuditoria::class)->handle(
+                new CrearRegistroAuditoriaRequest(
+                    $query->sql,
+                    $userId,
+                    request()->url(),
+                    $query->bindings,
+                    config('auditoria.excluded_tables')
+                ));
         });
-        // Automatically apply the package configuration
 
     }
 }
