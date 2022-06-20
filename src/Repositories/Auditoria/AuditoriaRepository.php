@@ -42,4 +42,8 @@ class AuditoriaRepository
             $auditoriaCreada->tabla,
         );
     }
+
+    public function borrar(string $fechaDesde, string $fechaHasta):void{
+        $this->db->table($this->tabla)->whereBetween('created_at',[$fechaDesde,$fechaHasta])->delete();
+    }
 }

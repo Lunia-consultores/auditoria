@@ -13,7 +13,7 @@ use Ramsey\Uuid\Uuid;
 class CrearRegistroAuditoriaTest extends TestCase
 {
     private CrearRegistroAuditoria $crearRegistroAuditoria;
-    private mixed $db;
+    private DatabaseManager $db;
 
     protected function setUp(): void
     {
