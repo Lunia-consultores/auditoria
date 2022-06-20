@@ -31,7 +31,7 @@ class CrearRegistroAuditoria
             $accion = 'UPDATE';
             $tabla = trim(str_replace('update', '', $query));
             $queryFormateadaEnArray = explode(' ', $tabla);
-        } else if (str_contains($query, 'delete')) {
+        } else if (str_contains($query, 'delete from')) {
             $accion = 'DELETE';
             $tabla = trim(str_replace('delete from', '', $query));
             $queryFormateadaEnArray = explode(' ', $tabla);
@@ -41,7 +41,7 @@ class CrearRegistroAuditoria
         
         $tablaExtraida = str_replace('`',"", str_replace('"','',$queryFormateadaEnArray[0]));
 
-        if(in_array($tablaExtraida,['auditoria','migrations']) === true){
+        if(in_array($tablaExtraida,array_merge($crearRegistroAuditoriaRequest->excludedTables,['auditoria','migrations'])) === true){
             return;
         }
 

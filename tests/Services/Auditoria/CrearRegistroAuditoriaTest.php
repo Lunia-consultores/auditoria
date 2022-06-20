@@ -42,6 +42,20 @@ class CrearRegistroAuditoriaTest extends TestCase
         $this->assertEquals($usuarioId, $auditoria->usuarioId());
         $this->assertEquals([$usuarioId], $auditoria->payload());
     }
+ public function testNoDebeCrearRegistroInsertSiExcluida(): void
+    {
+        $usuarioId = Uuid::uuid4();
+
+        $auditoria = $this->crearRegistroAuditoria->handle(new CrearRegistroAuditoriaRequest(
+            'insert into `auditoria` (`id`, `accion`, `query`, `usuario_id`, `url`, `payload`, `tabla`, `created_at`, `updated_at`) values (?, ?, ?, ?, ?, ?, ?, ?, ?);',
+            $usuarioId,
+            'http://localhost/manolo',
+            [$usuarioId],
+            ['equipamiento_excluded']
+        ));
+
+        $this->assertNull($auditoria);
+    }
 
     public function testDebeCrearRegistroUpdate(): void
     {
@@ -103,7 +117,7 @@ class CrearRegistroAuditoriaTest extends TestCase
         $usuarioId = Uuid::uuid4();
 
         $auditoria = $this->crearRegistroAuditoria->handle(new CrearRegistroAuditoriaRequest(
-            'select * from tabla',
+            'select * from `users` where `email` = ? and `active` = ? and `users`.`deleted_at` is null limit 1',
             $usuarioId,
             'http://localhost/manolo',
             [$usuarioId],
