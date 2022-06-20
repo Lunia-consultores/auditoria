@@ -3,6 +3,8 @@
 namespace Lunia\Auditoria\Tests\Services\Auditoria;
 
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoria;
 use Lunia\Auditoria\Services\Auditoria\CrearRegistroAuditoriaRequest;
 use Lunia\Auditoria\Tests\TestCase;
@@ -25,7 +27,7 @@ class CrearRegistroAuditoriaTest extends TestCase
         $usuarioId = Uuid::uuid4();
 
         $auditoria = $this->crearRegistroAuditoria->handle(new CrearRegistroAuditoriaRequest(
-            'insert into my_table(id) values(?);',
+            'insert into my_table (id) values(?);',
             $usuarioId,
             'http://localhost/manolo',
             [$usuarioId]

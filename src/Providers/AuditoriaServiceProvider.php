@@ -2,8 +2,8 @@
 
 namespace Lunia\Auditoria\Providers;
 
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\ServiceProvider;
-use Lunia\Auditoria\Auditoria;
 
 class AuditoriaServiceProvider extends ServiceProvider
 {
@@ -12,12 +12,7 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /*
-         * Optional methods to load your package assets
-         */
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'auditoria');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'auditoria');
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations'));
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         if ($this->app->runningInConsole()) {
@@ -51,11 +46,7 @@ class AuditoriaServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'auditoria');
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
 
-        // Register the main class to use with the facade
-        $this->app->singleton('auditoria', function () {
-           return new Auditoria;
-        });
     }
 }

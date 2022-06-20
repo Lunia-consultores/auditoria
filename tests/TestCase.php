@@ -1,10 +1,24 @@
 <?php
+
 namespace Lunia\Auditoria\Tests;
 
-use Orchestra\Testbench\Concerns\CreatesApplication;
-use \PHPUnit\Framework\TestCase as BaseTestCase;
 
-abstract class TestCase extends BaseTestCase
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Lunia\Auditoria\Providers\AuditoriaServiceProvider;
+
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use CreatesApplication;
+
+    protected function setUp():void
+    {
+        parent::setUp();
+        $this->artisan('migrate', [
+            '--realpath' =>realpath(__DIR__.'/../database/migrations'),
+        ]);
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [AuditoriaServiceProvider::class];
+    }
 }
