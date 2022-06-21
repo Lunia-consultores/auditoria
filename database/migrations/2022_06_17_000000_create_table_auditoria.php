@@ -13,6 +13,10 @@ class CreateTableAuditoria extends Migration
      */
     public function up()
     {
+        if (Schema::connection(config('auditoria.db_connection'))->hasTable('auditoria')) {
+            return;
+        }
+
         Schema::connection(config('auditoria.db_connection'))->create('auditoria', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('accion')->index();
