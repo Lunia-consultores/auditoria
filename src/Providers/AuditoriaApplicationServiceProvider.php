@@ -2,6 +2,7 @@
 
 namespace Lunia\Auditoria\Providers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Lunia\Auditoria\Commands\ArchivaAuditoriaCommand;
@@ -17,7 +18,9 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        if( App::runningUnitTests()) {
+            config()->set('auditoria.enable_audit',false);
+        }
         Event::listen(MigrationsStarted::class, function($event) {
             config()->set('auditoria.enable_audit',false);
         });
