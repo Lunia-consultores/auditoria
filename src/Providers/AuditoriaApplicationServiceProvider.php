@@ -18,9 +18,11 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if( App::runningUnitTests()) {
-            config()->set('auditoria.enable_audit',false);
-        }
+
+
+        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
+
+
         Event::listen(MigrationsStarted::class, function($event) {
             config()->set('auditoria.enable_audit',false);
         });
@@ -28,10 +30,9 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
         Event::listen(MigrationsEnded::class, function($event) {
             config()->set('auditoria.enable_audit',true);
         });
-
-
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../../config/config.php'), 'auditoria');
-
+        if( App::runningUnitTests()) {
+            config()->set('auditoria.enable_audit',false);
+        }
         if ($this->app->runningInConsole()) {
 
             $this->publishes([
