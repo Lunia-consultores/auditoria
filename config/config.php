@@ -6,5 +6,5 @@
 return [
     'db_connection' => env('AUDITORIA_DB_CONNECTION', 'testing'),
     'excluded_tables' => [],
-    'enable_audit' => false,
+    'enable_audit' => env('AUDITORIA_ENABLE', false),
 ];
