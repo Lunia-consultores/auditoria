@@ -10,5 +10,6 @@
     </testsuites>
     <php>
         <env name="DB_CONNECTION" value="testing"/>
+        <env name="RUNNING_TESTS" value="true"/>
     </php>
 </phpunit>
