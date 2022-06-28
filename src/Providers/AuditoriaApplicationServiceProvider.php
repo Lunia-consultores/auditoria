@@ -56,12 +56,10 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
                     $output->writeln("<error>La conexión de auditoría no puede coincidir con la conexión por defecto</error>");
                     return;
                 }
+
+                $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations'));
+                $this->commands([ArchivaAuditoriaCommand::class]);
             }
-
-
-            $this->loadMigrationsFrom(realpath(__DIR__ . '/../../database/migrations'));
-
-            $this->commands([ArchivaAuditoriaCommand::class]);
         }
     }
 
