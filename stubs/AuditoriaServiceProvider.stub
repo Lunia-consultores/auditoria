@@ -19,29 +19,27 @@ class AuditoriaServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        /** @var CrearRegistroAuditoria $crearReigstroAuditoria */
+        $crearReigstroAuditoria = app()->make(CrearRegistroAuditoria::class);
 
-        DB::listen(function (QueryExecuted $query) {
+        DB::listen(function (QueryExecuted $query) use ($crearReigstroAuditoria) {
 
             if(config('auditoria.enable_audit') === false){
                 return;
             }
-            try{
-                $token = JWTAuth::getToken();
-                $apy = JWTAuth::getPayload($token)->toArray();
-                $userId = $apy['sub'];
-            }catch (\Throwable $throwable) {
-                $userId = null;
+
+            if (preg_match('/^(select).*(from)/i', $query->sql)) {
+                return;
             }
 
-            app()->make(CrearRegistroAuditoria::class)->handle(
+            $crearReigstroAuditoria->handle(
                 new CrearRegistroAuditoriaRequest(
                     $query->sql,
-                    $userId,
+                    auth()->id(),
                     request()->url(),
                     $query->bindings,
                     config('auditoria.excluded_tables')
                 ));
         });
-
     }
 }

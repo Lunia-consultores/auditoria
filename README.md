@@ -1,29 +1,42 @@
-# Very short description of the package
+# Auditoria
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/lunia/auditoria.svg?style=flat-square)](https://packagist.org/packages/lunia/auditoria)
-[![Total Downloads](https://img.shields.io/packagist/dt/lunia/auditoria.svg?style=flat-square)](https://packagist.org/packages/lunia/auditoria)
-![GitHub Actions](https://github.com/lunia/auditoria/actions/workflows/main.yml/badge.svg)
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Lunia Consultores S.L.
 
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
 composer require lunia/auditoria
 ```
 
-## Usage
-
-```php
-// Usage description here
-```
-
-### Testing
+Publish configuration and service provider:
 
 ```bash
-composer test
+php artisan vendor:publish --provider="Lunia\Auditoria\Providers\AuditoriaApplicationServiceProvider"
+```
+
+Configure other DB connection in _config/database.php_ and then set in _.env_:
+
+```env
+AUDITORIA_DB_CONNECTION=$DB_CONNECTION_NAME
+AUDITORIA_ENABLE=true
+```
+
+Register published **AuditoriaServiceProvider** in _config/app.php_:
+```php
+return [
+    ...
+    
+    \App\Providers\AuditoriaServiceProvider::class,
+    
+    ...
+]
+```
+
+Set variable in _phpunit.xml_ to not audit while running tests:
+```xml
+<server name="AUDITORIA_ENABLE" value="false" force="true"/>
 ```
 
 ### Changelog
