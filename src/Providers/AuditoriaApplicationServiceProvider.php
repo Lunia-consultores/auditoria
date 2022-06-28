@@ -42,7 +42,7 @@ class AuditoriaApplicationServiceProvider extends ServiceProvider
                 realpath(__DIR__ . '/../../stubs/AuditoriaServiceProvider.stub') => app_path('Providers/AuditoriaServiceProvider.php'),
             ], 'auditoria-provider');
 
-            if(env('RUNNING_TESTS',false) === FALSE)
+            if(config('auditoria.enable_audit') === TRUE)
             {
                 if (is_null(config('database.connections.'.config('auditoria.db_connection')))){
                     config()->set('auditoria.enable_audit',false);
