@@ -20,9 +20,9 @@ class CreateTableAuditoria extends Migration
         Schema::connection(config('auditoria.db_connection'))->create('auditoria', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('accion')->index();
-            $table->text('query')->index();
+            $table->text('query');
             $table->string('usuario_id')->index()->nullable();
-            $table->text('payload')->index();
+            $table->text('payload');
             $table->string('url')->index();
             $table->string('tabla')->index();
             $table->timestamp('created_at')->nullable()->index();
